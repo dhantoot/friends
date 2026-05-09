@@ -6,6 +6,7 @@ import { StatusBar } from '@capacitor/status-bar'
 import Header from './components/Header';
 import BottomNav0 from './components/BottomNav0';
 import ProfileCard from './components/ProfileCard';
+import ToastNotification from './components/ToastNotification';
 
 interface ProfileData {
   name: string;
@@ -144,6 +145,7 @@ function App() {
           "relative flex-1 w-full transition-transform duration-700 ease-[cubic-bezier(0.23,1,0.32,1)] z-10",
           currentView === 'profile' ? "-translate-y-full" : "translate-y-0"
         )}
+        style={{ background: 'transparent' }}
       >
         {/* PAGE 1: Discovery Feed */}
         <div className={cn(
@@ -156,12 +158,12 @@ function App() {
           </div>
 
           {/* Card Area */}
-          <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
+          <div className="flex-1 w-full flex items-center justify-center overflow-hidden" style={{ background: 'transparent' }}>
             <div 
               ref={scrollRef}
               onScroll={handleScroll}
               className="w-full overflow-x-scroll touch-pan-x flex items-center gap-4 hide-scrollbar snap-x snap-mandatory py-4"
-              style={{ paddingLeft: `${sidePadding}px`, paddingRight: `${sidePadding}px` }}
+              style={{ paddingLeft: `${sidePadding}px`, paddingRight: `${sidePadding}px`, background: 'transparent' }}
             >
               {profiles.map((profile, i) => {
                 const cardCenter = i * 176;
@@ -177,7 +179,8 @@ function App() {
                     className="flex-shrink-0 snap-center origin-center transition-none"
                     style={{
                       transform: `scale(${scale})`,
-                      opacity: opacity
+                      opacity: opacity,
+                      background: 'transparent'
                     }}
                   >
                     <ProfileCard 
@@ -212,6 +215,16 @@ function App() {
           </div>
 
         </div>
+      </div>
+
+      {/* Fixed Toast Overlay - above everything, respects status bar */}
+      <div
+        className="fixed inset-x-0 top-0 z-[999] flex flex-col items-center gap-2 pointer-events-none"
+        style={{ paddingTop: 'calc(env(safe-area-inset-top) + 8px)' }}
+      >
+        {notifications.map((n) => (
+          <ToastNotification key={n.id} id={n.id} message={n.message} />
+        ))}
       </div>
 
       {/* Bottom Nav Area */}

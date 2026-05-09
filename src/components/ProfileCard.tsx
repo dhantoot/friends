@@ -18,7 +18,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ className, style, profile, on
     <div
       className={cn(
         "relative w-[160px] h-full min-h-[180px] max-h-[300px] rounded-[2rem] overflow-hidden bg-[#FDFDFD]",
-        "shadow-[0_12px_30px_rgba(57,43,40,0.12),inset_0_1px_1px_rgba(255,255,255,1)]",
+        "shadow-[0_12px_30px_rgba(57,43,40,0.12),inset_0_1px_1px_rgba(255,255,255,0.4)]",
         "border border-[#392B28]/10",
         className
       )}
