@@ -22,14 +22,18 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ className, style, profile, on
         "border border-[#392B28]/10",
         className
       )}
-      style={style}
+      style={{...style, touchAction: 'pan-x', WebkitUserSelect: 'none', userSelect: 'none'} as React.CSSProperties}
     >
       {/* Profile Image - Now Full Background */}
-      <div className="absolute inset-0 overflow-hidden">
+      <div 
+        className="absolute inset-0 overflow-hidden pointer-events-none"
+        style={{ WebkitTouchCallout: 'none' } as React.CSSProperties}
+      >
         <img
           src={profile?.imageUrl || "/sophie.png"}
           alt={profile?.name || "Profile"}
-          className="w-full h-full object-cover"
+          draggable={false}
+          className="w-full h-full object-cover pointer-events-none select-none"
         />
         {/* Immersive Fade / Gradient Overlay */}
         <div className="absolute inset-0 bg-gradient-to-t from-[#FDFDFD] via-[#FDFDFD]/40 to-transparent" />

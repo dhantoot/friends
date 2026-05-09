@@ -127,7 +127,7 @@ function App() {
 
   return (
     <div 
-      className="flex flex-col h-screen w-screen bg-transparent relative overflow-hidden overscroll-none"
+      className="flex flex-col h-[100dvh] w-screen bg-transparent relative overflow-hidden"
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
       onTouchStart={handleTouchStart}
@@ -156,11 +156,11 @@ function App() {
           </div>
 
           {/* Card Area */}
-          <div className="flex-1 w-full flex items-center justify-center overflow-hidden touch-pan-x overscroll-none">
+          <div className="flex-1 w-full flex items-center justify-center overflow-hidden">
             <div 
               ref={scrollRef}
               onScroll={handleScroll}
-              className="w-full overflow-x-scroll overscroll-x-none flex items-center gap-4 hide-scrollbar snap-x snap-mandatory py-4"
+              className="w-full overflow-x-scroll touch-pan-x flex items-center gap-4 hide-scrollbar snap-x snap-mandatory py-4"
               style={{ paddingLeft: `${sidePadding}px`, paddingRight: `${sidePadding}px` }}
             >
               {profiles.map((profile, i) => {
@@ -215,7 +215,7 @@ function App() {
       </div>
 
       {/* Bottom Nav Area */}
-      <div className="flex-none z-[100] pb-[env(safe-area-inset-bottom)]">
+      <div className="flex-none z-[100]">
         <BottomNav0 />
       </div>
     </div>
