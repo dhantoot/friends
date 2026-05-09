@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Symmetrical Header - Milky Edition</title>
+    <style>
+        :root {
+            --card-width: 366px;
+            --card-height: 170px;
+            --milky-white: #FDFDFD;
+            --milky-cream: #F5F5F0;
+            --milky-beige: #F0EDE5;
+            --accent-text: #392B28;
+            --bg-dark: #0A0A0C;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: var(--bg-dark);
+            margin: 0;
+            font-family: 'Outfit', 'Inter', system-ui, sans-serif;
+            overflow: hidden;
+        }
+
+        /* Container for the aurora background preview */
+        .preview-stage {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: radial-gradient(circle at 50% 50%, #1a1a2e 0%, #0A0A0C 100%);
+        }
+
+        .header-wrapper {
+            position: relative;
+            width: var(--card-width);
+            height: var(--card-height);
+            transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+            filter: drop-shadow(0 20px 40px rgba(0,0,0,0.4));
+        }
+
+        .header-wrapper:hover {
+            transform: translateY(8px) scale(1.02);
+        }
+
+        /* The Header Div using Clip-Path Symmetrization */
+        .header-div {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(180deg, 
+                rgba(253, 253, 253, 0.98) 0%, 
+                rgba(245, 245, 240, 0.95) 50%, 
+                rgba(240, 237, 229, 0.92) 100%
+            );
+            position: relative;
+            
+            /* Symmetrical Header path extracted and balanced from Header.svg */
+            clip-path: path('M 25 0.5 H 122 C 133 0.5, 136 11, 144.5 26.5 C 160 58, 206 58, 221.5 26.5 C 230 11, 233 0.5, 244 0.5 H 341 C 355 0.5, 365 10.5, 365 25 V 145 C 365 159.5, 355 169.5, 341 169.5 H 251 C 242 169.5, 236 159.5, 236 143.5 C 236 127.5, 223 122, 216 122 H 150 C 143 122, 130 127.5, 130 143.5 C 130 159.5, 124 169.5, 115 169.5 H 25 C 11 169.5, 1 159.5, 1 145 V 25 C 1 10.5, 11 0.5, 25 0.5 Z');
+            
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 0.8px solid rgba(57, 43, 40, 0.15);
+            backdrop-filter: blur(10px);
+        }
+
+        .header-div::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(180deg, rgba(255,255,255,0.4) 0%, transparent 40%);
+            pointer-events: none;
+        }
+
+        .content {
+            text-align: center;
+            z-index: 10;
+        }
+
+        .tag {
+            font-size: 9px;
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            color: rgba(57, 43, 40, 0.4);
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: 900;
+            color: var(--accent-text);
+            letter-spacing: -1px;
+            transform: translateY(2px);
+        }
+
+        /* Floating decoration for extra premium feel */
+        .accent-dot {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #392B28;
+            border-radius: 50%;
+            bottom: 30px;
+            opacity: 0.2;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="preview-stage">
+        <div class="header-wrapper">
+            <div class="header-div">
+                <div class="content">
+                    <div class="tag">Interface Header</div>
+                    <div class="title">SYMMETRICAL V3</div>
+                </div>
+                <div class="accent-dot"></div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>

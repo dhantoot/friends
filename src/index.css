@@ -1,0 +1,61 @@
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;500;600;700;800&display=swap');
+@import "tailwindcss";
+
+:root {
+  font-family: 'Manrope', system-ui, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light;
+  color: rgba(0, 0, 0, 0.87);
+  background-color: transparent;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+  background-color: transparent;
+  /* Safe Area handling for Edge-to-Edge mobile layouts */
+  padding-top: env(safe-area-inset-top, 0px);
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  padding-left: env(safe-area-inset-left, 0px);
+  padding-right: env(safe-area-inset-right, 0px);
+}
+
+@theme {
+  --color-steel-gradient-start: #392B28;
+  --color-steel-gradient-end: #292929;
+
+  --animate-drift-1: drift1 12s ease-in-out infinite alternate;
+  --animate-drift-2: drift2 15s ease-in-out infinite alternate;
+  --animate-drift-3: drift3 10s ease-in-out infinite alternate;
+  --animate-float-up: float-up linear infinite;
+
+  @keyframes drift1 {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(60px, 40px) scale(1.1); }
+  }
+  @keyframes drift2 {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(-50px, -60px) scale(1.15); }
+  }
+  @keyframes drift3 {
+    from { transform: translate(0, 0) scale(1); }
+    to { transform: translate(40px, -50px) scale(0.9); }
+  }
+  @keyframes float-up {
+    0% { opacity: 0; transform: translateY(0) scale(1); }
+    20% { opacity: 0.6; }
+    80% { opacity: 0.3; }
+    100% { opacity: 0; transform: translateY(-80vh) scale(0.3); }
+  }
+}
+
