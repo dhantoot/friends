@@ -22,7 +22,7 @@ const ProfileCard: React.FC<ProfileCardProps> = ({ className, style, profile, on
         "border border-[#392B28]/10",
         className
       )}
-      style={{...style, touchAction: 'pan-x', WebkitUserSelect: 'none', userSelect: 'none'} as React.CSSProperties}
+      style={{...style, touchAction: 'pan-x', WebkitUserSelect: 'none', userSelect: 'none', pointerEvents: 'auto'} as React.CSSProperties}
     >
       {/* Profile Image - Now Full Background */}
       <div 

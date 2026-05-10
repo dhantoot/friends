@@ -122,7 +122,7 @@ const BottomNav: React.FC<BottomNav0Props> = ({ className, style }) => {
             <ScrollPicker
               values={['M', 'F', 'G', 'T', 'O']}
               onChange={(val) => console.log('Gender Preference:', val)}
-              className="ml-2 scale-90"
+              className="mx-2"
             />
 
             {/* Availability Toggle Button - Last Nav Item */}

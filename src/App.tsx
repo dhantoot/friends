@@ -51,6 +51,9 @@ function App() {
 
   const scrollRef = useRef<HTMLDivElement>(null);
   const touchStartRef = useRef<number | null>(null);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragScrollLeftRef = useRef(0);
 
   useEffect(() => {
     const configureStatusBar = async () => {
@@ -86,6 +89,43 @@ function App() {
     if (newIndex !== activeIndex && newIndex >= 0 && newIndex < profiles.length) {
       setActiveIndex(newIndex);
     }
+  };
+
+  // Manual drag-to-scroll handlers (works from any part of the card)
+  const handleCarouselPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const el = scrollRef.current;
+    if (!el) return;
+    isDraggingRef.current = true;
+    dragStartXRef.current = e.clientX;
+    dragScrollLeftRef.current = el.scrollLeft;
+    el.setPointerCapture(e.pointerId);
+    el.style.scrollSnapType = 'none'; // disable snap during drag
+    el.style.cursor = 'grabbing';
+  };
+
+  const handleCarouselPointerMove = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || !scrollRef.current) return;
+    e.preventDefault();
+    const dx = e.clientX - dragStartXRef.current;
+    scrollRef.current.scrollLeft = dragScrollLeftRef.current - dx;
+    // Update scroll tracking
+    const scrollLeft = scrollRef.current.scrollLeft;
+    setScrollX(scrollLeft);
+    const newIndex = Math.round(scrollLeft / 176);
+    if (newIndex !== activeIndex && newIndex >= 0 && newIndex < profiles.length) {
+      setActiveIndex(newIndex);
+    }
+  };
+
+  const handleCarouselPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || !scrollRef.current) return;
+    isDraggingRef.current = false;
+    scrollRef.current.releasePointerCapture(e.pointerId);
+    // Re-enable snap and snap to nearest card
+    scrollRef.current.style.scrollSnapType = 'x mandatory';
+    scrollRef.current.style.cursor = '';
+    const nearest = Math.round(scrollRef.current.scrollLeft / 176) * 176;
+    scrollRef.current.scrollTo({ left: nearest, behavior: 'smooth' });
   };
 
   const handlePointerDown = (e: React.PointerEvent) => {
@@ -153,7 +193,7 @@ function App() {
           currentView === 'discovery' ? "opacity-100 visible z-20" : "opacity-0 invisible z-0"
         )}>
           {/* Header Area - Notifications passed down */}
-          <div className="flex-none z-50 pt-[env(safe-area-inset-top)] mt-2 px-2 w-full max-w-[460px] mx-auto">
+          <div className="flex-none z-50 pt-[env(safe-area-inset-top)] mt-2 px-2 w-full max-w-[460px] mx-auto pointer-events-none">
             <Header profile={profiles[activeIndex]} notifications={notifications} />
           </div>
 
@@ -162,8 +202,12 @@ function App() {
             <div 
               ref={scrollRef}
               onScroll={handleScroll}
-              className="w-full overflow-x-scroll touch-pan-x flex items-center gap-4 hide-scrollbar snap-x snap-mandatory py-4"
-              style={{ paddingLeft: `${sidePadding}px`, paddingRight: `${sidePadding}px`, background: 'transparent' }}
+              onPointerDown={handleCarouselPointerDown}
+              onPointerMove={handleCarouselPointerMove}
+              onPointerUp={handleCarouselPointerUp}
+              onPointerCancel={handleCarouselPointerUp}
+              className="w-full overflow-x-scroll flex items-center gap-4 hide-scrollbar snap-x snap-mandatory py-4 pointer-events-auto touch-pan-x"
+              style={{ paddingLeft: `${sidePadding}px`, paddingRight: `${sidePadding}px`, background: 'transparent', cursor: 'grab', touchAction: 'pan-x' }}
             >
               {profiles.map((profile, i) => {
                 const cardCenter = i * 176;

@@ -18,6 +18,8 @@ const ScrollPicker: React.FC<ScrollPickerProps> = ({
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeftState, setScrollLeftState] = useState(0);
+  const touchStartXRef = useRef(0);
+  const touchScrollLeftRef = useRef(0);
 
   const handleScroll = () => {
     if (!scrollRef.current) return;
@@ -76,8 +78,31 @@ const ScrollPicker: React.FC<ScrollPickerProps> = ({
     if (!isDragging || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 0.3; 
+    const walk = (x - startX) * 0.25; // slowed down
     scrollRef.current.scrollLeft = scrollLeftState - walk;
+  };
+
+  // Touch drag handlers (slowed down for mobile)
+  const onTouchStart = (e: React.TouchEvent) => {
+    if (!scrollRef.current) return;
+    touchStartXRef.current = e.touches[0].pageX;
+    touchScrollLeftRef.current = scrollRef.current.scrollLeft;
+    scrollRef.current.style.scrollBehavior = 'auto';
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    if (!scrollRef.current) return;
+    const dx = touchStartXRef.current - e.touches[0].pageX;
+    // 0.4 multiplier = slower scroll on mobile
+    scrollRef.current.scrollLeft = touchScrollLeftRef.current + dx * 0.4;
+  };
+
+  const onTouchEnd = () => {
+    if (!scrollRef.current) return;
+    scrollRef.current.style.scrollBehavior = 'smooth';
+    const itemWidth = scrollRef.current.offsetWidth / 3;
+    const nearest = Math.round(scrollRef.current.scrollLeft / itemWidth) * itemWidth;
+    scrollRef.current.scrollTo({ left: nearest, behavior: 'smooth' });
   };
 
   // Wheel listener
@@ -113,7 +138,7 @@ const ScrollPicker: React.FC<ScrollPickerProps> = ({
 
   return (
     <div className={cn(
-      "relative w-16 h-10 rounded-full border border-[#392B28]/10 bg-[#FDFDFD]",
+      "relative w-20 h-10 rounded-full border border-[#392B28]/10 bg-[#FDFDFD]",
       "shadow-[0_4px_10px_rgba(57,43,40,0.12),inset_0_1px_1px_rgba(255,255,255,1)]",
       "overflow-hidden group transition-all duration-300 hover:border-[#392B28]/20 hover:translate-y-[-1px]",
       className
@@ -128,6 +153,9 @@ const ScrollPicker: React.FC<ScrollPickerProps> = ({
         onMouseLeave={onMouseLeave}
         onMouseUp={onMouseUp}
         onMouseMove={onMouseMove}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
         className={cn(
           "h-full flex overflow-x-scroll snap-x snap-mandatory scroll-smooth hide-scrollbar cursor-grab",
           isDragging && "cursor-grabbing"

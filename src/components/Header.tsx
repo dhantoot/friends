@@ -40,7 +40,7 @@ const Header: React.FC<HeaderProps> = ({
   const perfectPath = "M 68 1 H 17 C 7 1, 1 12, 1 19 V 306 C 1 319, 10 324, 14 324 H 95 C 109 322, 112 314, 124 304 C 134 296, 138 296, 148 304 C 160 314, 163 322, 177 324 H 258 C 262 324, 271 319, 271 306 V 19 C 271 12, 265 1, 255 1 H 204 C 200 1, 193 4, 191 11 C 189 18, 183 21, 181 21.5 H 91 C 88 21, 82 18, 81 11 C 79 4, 72 1, 68 1 Z";
 
   return (
-    <div className={cn("relative w-full aspect-[272/325] bg-transparent", className)} style={style}>
+    <div className={cn("relative w-full aspect-[272/325] bg-transparent pointer-events-none", className)} style={style}>
       {/* SVG Background Layer */}
       <svg className="absolute inset-0 w-full h-full drop-shadow-[0_20px_50px_rgba(57,43,40,0.15)] z-0" viewBox="0 0 272 325" fill="none">
         <defs>
@@ -92,10 +92,10 @@ const Header: React.FC<HeaderProps> = ({
       <div className="relative w-full h-full overflow-hidden rounded-[2.5rem] z-10 pointer-events-none">
         {!isEditable ? (
           /* Page 1: Discovery Style */
-          <div className="absolute inset-x-0 bottom-0 top-[65px] px-2 pb-6 flex flex-col items-center z-10 pointer-events-auto">
+          <div className="absolute inset-x-0 bottom-0 top-[65px] px-2 pb-6 flex flex-col items-center z-10 pointer-events-none">
             <div className="text-[9px] uppercase tracking-[4px] text-[#392B28]/40 mb-1.5 font-bold">Profile Overview</div>
 
-            <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="flex items-center justify-center gap-2 mb-3 pointer-events-auto">
               <h2 className="text-[26px] font-black text-[#392B28] uppercase tracking-tight">{profile?.name}</h2>
               <div className={cn("flex items-center justify-center w-5 h-5 rounded-full shrink-0 shadow-sm", profile?.status === 'online' ? "bg-green-600" : "bg-blue-500")}>
                 {profile?.status === 'online' ? <CheckCircle2 className="w-3 h-3 text-white fill-white" /> : <Moon className="w-2.5 h-2.5 text-white fill-white" />}
@@ -103,7 +103,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Height & Body */}
-            <div className="w-full flex justify-between px-6 mb-6">
+            <div className="w-full flex justify-between px-6 mb-6 pointer-events-auto">
               <div className="flex items-center gap-1.5 px-3 py-1 bg-[#392B28]/[0.05] rounded-full">
                 <span className="text-[9px] font-bold text-[#392B28]/40 uppercase tracking-widest">Ht:</span>
                 <span className="text-[11px] font-bold text-[#392B28]">{profile?.height}</span>
@@ -115,7 +115,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Vibe Tags (Likes & Red Flags) */}
-            <div className="w-full flex justify-between px-6 mb-8">
+            <div className="w-full flex justify-between px-6 mb-8 pointer-events-auto">
               {/* LIKES */}
               <div className="flex flex-col items-start w-[45%]">
                 <span className="text-[9px] font-black text-green-500 uppercase tracking-[2px] mb-2">Likes</span>
@@ -142,7 +142,7 @@ const Header: React.FC<HeaderProps> = ({
             </div>
 
             {/* Preference */}
-            <div className="w-full text-center px-6 flex flex-col items-center">
+            <div className="w-full text-center px-6 flex flex-col items-center pointer-events-auto">
               <div className="w-[30%] h-[0.5px] bg-[#392B28]/10 mb-3 rounded-full" />
               <span className="text-[9px] font-bold text-[#392B28]/30 uppercase tracking-[4px] block mb-2">Preference</span>
               <p className="text-[11px] font-semibold text-[#392B28]/90 leading-snug">"{profile?.preference}"</p>
@@ -151,9 +151,9 @@ const Header: React.FC<HeaderProps> = ({
         ) : (
           /* Page 2: Identity Style */
           <>
-            <div className="absolute inset-x-0 bottom-0 top-[65px] px-2 pb-6 overflow-y-auto hide-scrollbar flex flex-col items-center z-10 pointer-events-auto">
+            <div className="absolute inset-x-0 bottom-0 top-[65px] px-2 pb-6 overflow-y-auto hide-scrollbar flex flex-col items-center z-10 pointer-events-none">
               {profile && (
-                <div className="w-full flex flex-col items-center">
+                <div className="w-full flex flex-col items-center pointer-events-auto">
                   <div className="text-[9px] uppercase tracking-[4px] text-[#392B28]/40 mb-1.5 font-bold">Your Profile</div>
 
                   <div className="flex items-center justify-center gap-2 mb-3">
