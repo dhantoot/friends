@@ -82,19 +82,23 @@ function App() {
 
   const handleScroll = (e: React.UIEvent<HTMLDivElement>) => {
     const scrollLeft = e.currentTarget.scrollLeft;
-    setScrollX(scrollLeft);
-    
-    // Each card is 160px wide + 16px gap = 176px interval
-    const newIndex = Math.round(scrollLeft / 176);
-    if (newIndex !== activeIndex && newIndex >= 0 && newIndex < profiles.length) {
-      setActiveIndex(newIndex);
-    }
+    requestAnimationFrame(() => {
+      setScrollX(scrollLeft);
+      const newIndex = Math.round(scrollLeft / 176);
+      if (newIndex !== activeIndex && newIndex >= 0 && newIndex < profiles.length) {
+        setActiveIndex(newIndex);
+      }
+    });
   };
 
   // Manual drag-to-scroll handlers (works from any part of the card)
   const handleCarouselPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
     const el = scrollRef.current;
     if (!el) return;
+
+    // Interrupt any ongoing smooth scroll animation
+    el.scrollTo({ left: el.scrollLeft, behavior: 'auto' });
+
     isDraggingRef.current = true;
     dragStartXRef.current = e.clientX;
     dragScrollLeftRef.current = el.scrollLeft;
@@ -107,14 +111,16 @@ function App() {
     if (!isDraggingRef.current || !scrollRef.current) return;
     e.preventDefault();
     const dx = e.clientX - dragStartXRef.current;
-    scrollRef.current.scrollLeft = dragScrollLeftRef.current - dx;
-    // Update scroll tracking
-    const scrollLeft = scrollRef.current.scrollLeft;
-    setScrollX(scrollLeft);
-    const newIndex = Math.round(scrollLeft / 176);
-    if (newIndex !== activeIndex && newIndex >= 0 && newIndex < profiles.length) {
-      setActiveIndex(newIndex);
-    }
+    const newScrollLeft = dragScrollLeftRef.current - dx;
+    scrollRef.current.scrollLeft = newScrollLeft;
+    
+    requestAnimationFrame(() => {
+      setScrollX(newScrollLeft);
+      const newIndex = Math.round(newScrollLeft / 176);
+      if (newIndex !== activeIndex && newIndex >= 0 && newIndex < profiles.length) {
+        setActiveIndex(newIndex);
+      }
+    });
   };
 
   const handleCarouselPointerUp = (e: React.PointerEvent<HTMLDivElement>) => {
@@ -222,9 +228,10 @@ function App() {
                     key={i} 
                     className="flex-shrink-0 snap-center origin-center transition-none"
                     style={{
-                      transform: `scale(${scale})`,
+                      transform: `scale(${scale}) translateZ(0)`,
                       opacity: opacity,
-                      background: 'transparent'
+                      background: 'transparent',
+                      willChange: 'transform, opacity'
                     }}
                   >
                     <ProfileCard 

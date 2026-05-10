@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { memo } from 'react';
 import { cn } from '@/lib/utils';
 import { CheckCircle2, Moon } from 'lucide-react';
 
@@ -270,4 +270,4 @@ const Header: React.FC<HeaderProps> = ({
   );
 };
 
-export default Header;
+export default memo(Header);

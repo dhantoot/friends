@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, memo } from 'react';
 
 interface MilkyBackgroundProps {
   theme?: 'none' | 'calm' | 'velvet' | 'milky';
@@ -129,4 +129,4 @@ const MilkyBackground: React.FC<MilkyBackgroundProps> = ({ theme = 'milky' }) =>
   );
 };
 
-export default MilkyBackground;
+export default memo(MilkyBackground);
