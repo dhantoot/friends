@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import React, { memo, useId } from 'react';
 import { cn } from '@/lib/utils';
 import { CheckCircle2, Moon } from 'lucide-react';
 
@@ -26,6 +26,7 @@ interface HeaderProps {
   onToggleEdit?: () => void;
   onUpdateField?: (field: keyof ProfileData, value: any) => void;
   notifications?: { id: number, message: string }[];
+  dense?: boolean;
 }
 
 const Header: React.FC<HeaderProps> = ({
@@ -36,15 +37,22 @@ const Header: React.FC<HeaderProps> = ({
   isEditing,
   onToggleEdit,
   onUpdateField,
+  dense,
 }) => {
   const perfectPath = "M 68 1 H 17 C 7 1, 1 12, 1 19 V 306 C 1 319, 10 324, 14 324 H 95 C 109 322, 112 314, 124 304 C 134 296, 138 296, 148 304 C 160 314, 163 322, 177 324 H 258 C 262 324, 271 319, 271 306 V 19 C 271 12, 265 1, 255 1 H 204 C 200 1, 193 4, 191 11 C 189 18, 183 21, 181 21.5 H 91 C 88 21, 82 18, 81 11 C 79 4, 72 1, 68 1 Z";
+  const uniqueId = useId().replace(/:/g, '-');
+  const clipId = `notch-clip-${uniqueId}`;
 
   return (
-    <div className={cn("relative w-full aspect-[272/325] bg-transparent pointer-events-none", className)} style={style}>
+    <div className={cn(
+      "relative w-full bg-transparent pointer-events-none transition-all duration-300", 
+      dense ? "aspect-[272/285]" : "aspect-[272/325]",
+      className
+    )} style={style}>
       {/* SVG Background Layer */}
-      <svg className="absolute inset-0 w-full h-full drop-shadow-[0_20px_50px_rgba(57,43,40,0.15)] z-0" viewBox="0 0 272 325" fill="none">
+      <svg className="absolute inset-0 w-full h-full drop-shadow-[0_20px_50px_rgba(57,43,40,0.15)] z-0" viewBox="0 0 272 325" fill="none" preserveAspectRatio="none">
         <defs>
-          <clipPath id={`notch-clip-${isEditable ? 'edit' : 'view'}`}>
+          <clipPath id={clipId}>
             <path d={perfectPath} />
           </clipPath>
         </defs>
@@ -53,17 +61,17 @@ const Header: React.FC<HeaderProps> = ({
           href={profile?.imageUrl || "/sophie.png"}
           x="0" y="0" width="272" height="325"
           preserveAspectRatio="xMidYMid slice"
-          clipPath={`url(#notch-clip-${isEditable ? 'edit' : 'view'})`}
+          clipPath={`url(#${clipId})`}
         />
 
         <path d={perfectPath} fill="#FDFDFD" fillOpacity="0.85" stroke="#ece9e2" strokeWidth="0.5" />
       </svg>
 
       {/* Shoulder Labels Layer */}
-      <div className="absolute top-2 left-[62px] -translate-x-1/2 flex items-center gap-1.5 pointer-events-none whitespace-nowrap z-20">
+      <div className="absolute top-2 left-[60px] -translate-x-1/2 flex items-center gap-1.5 pointer-events-none whitespace-nowrap z-20">
         <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse shadow-[0_0_5px_rgba(34,197,94,0.5)]" />
         <span className="text-[9px] font-black text-[#392B28]/40 uppercase tracking-[2px]">
-          {isEditable ? 'Your Rank' : 'Match 98%'}
+          {isEditable ? 'My Profile' : 'Match 98%'}
         </span>
       </div>
 
@@ -92,8 +100,8 @@ const Header: React.FC<HeaderProps> = ({
       <div className="relative w-full h-full overflow-hidden rounded-[2.5rem] z-10 pointer-events-none">
         {!isEditable ? (
           /* Page 1: Discovery Style */
-          <div className="absolute inset-x-0 bottom-0 top-[65px] px-2 pb-6 flex flex-col items-center z-10 pointer-events-none">
-            <div className="text-[9px] uppercase tracking-[4px] text-[#392B28]/40 mb-1.5 font-bold">Profile Overview</div>
+          <div className="absolute inset-x-0 bottom-0 top-[40px] px-2 pb-6 flex flex-col items-center z-10 pointer-events-none">
+            {!dense && <div className="text-[9px] uppercase tracking-[4px] text-[#392B28]/40 mb-1.5 font-bold">Profile Overview</div>}
 
             <div className="flex items-center justify-center gap-2 mb-3 pointer-events-auto">
               <h2 className="text-[26px] font-black text-[#392B28] uppercase tracking-tight">{profile?.name}</h2>
@@ -151,10 +159,10 @@ const Header: React.FC<HeaderProps> = ({
         ) : (
           /* Page 2: Identity Style */
           <>
-            <div className="absolute inset-x-0 bottom-0 top-[65px] px-2 pb-6 overflow-y-auto hide-scrollbar flex flex-col items-center z-10 pointer-events-none">
+            <div className="absolute inset-x-0 bottom-0 top-[40px] px-2 pb-6 overflow-y-auto hide-scrollbar flex flex-col items-center z-10 pointer-events-none">
               {profile && (
                 <div className="w-full flex flex-col items-center pointer-events-auto">
-                  <div className="text-[9px] uppercase tracking-[4px] text-[#392B28]/40 mb-1.5 font-bold">Your Profile</div>
+                  {!dense && <div className="text-[9px] uppercase tracking-[4px] text-[#392B28]/40 mb-1.5 font-bold">Your Profile</div>}
 
                   <div className="flex items-center justify-center gap-2 mb-3">
                     {isEditing ? (

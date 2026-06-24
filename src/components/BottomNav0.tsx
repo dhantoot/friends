@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { PhoneCall } from 'lucide-react';
+import { PhoneCall, ImagePlus } from 'lucide-react';
 import ScrollPicker from './common/ScrollPicker';
 
 interface BottomNav0Props {
   className?: string;
   style?: React.CSSProperties;
+  fabOnly?: boolean;
+  onFabClick?: () => void;
 }
 
-const BottomNav: React.FC<BottomNav0Props> = ({ className, style }) => {
+const BottomNav: React.FC<BottomNav0Props> = ({ className, style, fabOnly, onFabClick }) => {
   const [isPressed, setIsPressed] = useState(false);
   const [isSmartMode, setIsSmartMode] = useState(false);
   const [isBFFMode, setIsBFFMode] = useState(false);
@@ -16,7 +18,7 @@ const BottomNav: React.FC<BottomNav0Props> = ({ className, style }) => {
 
   return (
     <div className={cn("relative w-full overflow-visible", className)} style={style}>
-      <div className="relative w-full aspect-[460/104] overflow-visible">
+      <div className="relative w-full overflow-visible" style={{ height: '80px' }}>
 
         {/* Global Ambient Glow Layer - Spans entire width, blooming from the top edge */}
         {isAvailable && (
@@ -27,7 +29,10 @@ const BottomNav: React.FC<BottomNav0Props> = ({ className, style }) => {
         )}
 
         {/* Background Layer with Soft Milky Card Gradient */}
-        <div className="absolute inset-0 overflow-visible">
+        <div className={cn(
+          "absolute inset-0 overflow-visible transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
+          fabOnly ? "opacity-0 translate-y-10 pointer-events-none" : "opacity-100 translate-y-0"
+        )}>
           <svg className="absolute inset-0 w-full h-full" viewBox="0 0 460 104" preserveAspectRatio="none">
             <defs>
               <linearGradient id="bottomMilkyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
@@ -47,6 +52,7 @@ const BottomNav: React.FC<BottomNav0Props> = ({ className, style }) => {
 
         {/* Floating Action Button (FAB) - Refined for Milky Theme */}
         <button
+          onClick={onFabClick}
           className="absolute top-[-28%] left-1/2 -translate-x-1/2 w-[18%] aspect-square rounded-full transition-transform cursor-pointer group z-10 active:scale-95 animate-pulse overflow-hidden ring-1 ring-[#392B28]/10 flex items-center justify-center"
           style={{
             background: 'linear-gradient(135deg, #FDFDFD 0%, #F5F5F0 40%, #E5E2D9 100%)',
@@ -54,11 +60,19 @@ const BottomNav: React.FC<BottomNav0Props> = ({ className, style }) => {
           }}
         >
           <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#392B28]/5 opacity-0 group-hover:opacity-100 transition-opacity" />
-          <PhoneCall className="w-7 h-7 text-[#392B28] relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]" strokeWidth={2.5} />
+          {fabOnly ? (
+            <ImagePlus className="w-7 h-7 text-[#392B28] relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]" strokeWidth={2.5} />
+          ) : (
+            <PhoneCall className="w-7 h-7 text-[#392B28] relative z-10 drop-shadow-[0_2px_2px_rgba(0,0,0,0.1)]" strokeWidth={2.5} />
+          )}
         </button>
 
         {/* Navigation Items */}
-        <div className="absolute inset-0 w-full h-full flex justify-between items-center pointer-events-none">
+        {/* Navigation Items */}
+        <div className={cn(
+          "absolute inset-0 w-full h-full flex justify-between items-center pointer-events-none transition-all duration-700 ease-[cubic-bezier(0.23,1,0.32,1)]",
+          fabOnly ? "opacity-0 translate-y-10" : "opacity-100 translate-y-0"
+        )}>
 
           {/* Left Group */}
           <div className="flex flex-1 items-center justify-evenly pointer-events-auto mt-2 px-2">
